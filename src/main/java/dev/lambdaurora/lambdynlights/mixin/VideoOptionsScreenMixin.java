@@ -53,9 +53,4 @@ public class VideoOptionsScreenMixin extends GameOptionsScreen {
 		options[options.length - 1] = this.lambdynlights$option;
 		return options;
 	}
-
-	@Inject(method = "render", at = @At("TAIL"))
-	private void onRender(GuiGraphics graphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-		Tooltip.renderAll(graphics);
-	}
 }

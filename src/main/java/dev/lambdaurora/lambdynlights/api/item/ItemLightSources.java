@@ -12,6 +12,9 @@ package dev.lambdaurora.lambdynlights.api.item;
 import com.google.gson.JsonParser;
 import dev.lambdaurora.lambdynlights.LambDynLights;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -110,11 +113,42 @@ public final class ItemLightSources {
 	 */
 	public static int getLuminance(ItemStack stack, boolean submergedInWater) {
 		var data = ITEM_LIGHT_SOURCES.get(stack.getItem());
+		int luminance = 0;
 
 		if (data != null) {
-			return data.getLuminance(stack, submergedInWater);
-		} else if (stack.getItem() instanceof BlockItem blockItem)
-			return ItemLightSource.BlockItemLightSource.getLuminance(stack, blockItem.getBlock().getDefaultState());
-		else return 0;
+			luminance = data.getLuminance(stack, submergedInWater);
+		}
+		else if (stack.getItem() instanceof BlockItem blockItem) {
+			luminance = ItemLightSource.BlockItemLightSource.getLuminance(stack, blockItem.getBlock().getDefaultState());
+		}
+
+		return Math.min(luminance + extraEnchantmentsLuminance(stack), 15);
+	}
+
+	public static int extraEnchantmentsLuminance(ItemStack stack) {
+		if(!LambDynLights.get().config.getEnchantedLightSource().get() || !stack.hasEnchantments())
+			return 0;
+
+		final int luminanceCap = LambDynLights.get().config.getFixedEnchantedLightAmount().get();
+
+		if (!LambDynLights.get().config.getDynamicEnchantmentLighting().get()) {
+			return luminanceCap;
+		}
+		else {
+			ItemEnchantmentsComponent enchantmentsComponent = stack.method_58657(); // getEnchantments()
+			int enchantmentsForMaxLuminance = 5;
+			int extraLuminance = 0;
+
+			for (var entry : enchantmentsComponent.getEnchantmentEntries()) {
+				Enchantment enchantment = entry.getKey().value();
+				int level = enchantmentsComponent.getLevel(enchantment);
+				int maxLevel = enchantment.getMaxLevel();
+				int relativePower = level / maxLevel;
+
+				extraLuminance += relativePower * luminanceCap / enchantmentsForMaxLuminance;
+			}
+
+			return Math.min(extraLuminance, luminanceCap);
+		}
 	}
 }

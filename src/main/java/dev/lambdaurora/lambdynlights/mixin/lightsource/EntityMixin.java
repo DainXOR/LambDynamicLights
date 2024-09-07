@@ -80,11 +80,14 @@ public abstract class EntityMixin implements DynamicLightSource {
 		if (this.world.isClient()) {
 			if (this.isRemoved()) {
 				this.setDynamicLightEnabled(false);
-			} else {
+			}
+			else {
 				this.dynamicLightTick();
+
 				if ((!LambDynLights.get().config.getEntitiesLightSource().get() && this.getType() != EntityType.PLAYER)
 						|| !DynamicLightHandlers.canLightUp((Entity) (Object) this))
 					this.lambdynlights$luminance = 0;
+
 				LambDynLights.updateTracking(this);
 			}
 		}

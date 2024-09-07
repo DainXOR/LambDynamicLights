@@ -11,6 +11,7 @@ package dev.lambdaurora.lambdynlights;
 
 import com.electronwill.nightconfig.core.file.FileConfig;
 import dev.lambdaurora.lambdynlights.config.BooleanSettingEntry;
+import dev.lambdaurora.lambdynlights.config.IntegerSettingEntry;
 import dev.lambdaurora.lambdynlights.config.SettingEntry;
 import dev.lambdaurora.spruceui.option.SpruceCyclingOption;
 import dev.lambdaurora.spruceui.option.SpruceOption;
@@ -35,6 +36,9 @@ public class DynamicLightsConfig {
 	private static final boolean DEFAULT_SELF_LIGHT_SOURCE = true;
 	private static final boolean DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE = true;
 	private static final boolean DEFAULT_WATER_SENSITIVE_CHECK = true;
+	private static final boolean DEFAULT_ENCHANTED_LIGHT_SOURCE = true;
+	private static final boolean DEFAULT_DYNAMIC_ENCHANTED_LIGHT_AMOUNT = true;
+	private static final int DEFAULT_FIXED_ENCHANTED_LIGHT_AMOUNT = 7;
 	private static final ExplosiveLightingMode DEFAULT_CREEPER_LIGHTING_MODE = ExplosiveLightingMode.SIMPLE;
 	private static final ExplosiveLightingMode DEFAULT_TNT_LIGHTING_MODE = ExplosiveLightingMode.OFF;
 
@@ -46,6 +50,9 @@ public class DynamicLightsConfig {
 	private final BooleanSettingEntry selfLightSource;
 	private final BooleanSettingEntry blockEntitiesLightSource;
 	private final BooleanSettingEntry waterSensitiveCheck;
+	private final BooleanSettingEntry enchantedLightSource;
+	private final BooleanSettingEntry dynamicEnchantedLighting;
+	private final IntegerSettingEntry fixedEnchantedLightAmount;
 	private ExplosiveLightingMode creeperLightingMode;
 	private ExplosiveLightingMode tntLightingMode;
 
@@ -81,6 +88,13 @@ public class DynamicLightsConfig {
 				});
 		this.waterSensitiveCheck = new BooleanSettingEntry("light_sources.water_sensitive_check", DEFAULT_WATER_SENSITIVE_CHECK, this.config,
 				Text.translatable("lambdynlights.tooltip.water_sensitive"));
+		this.enchantedLightSource = new BooleanSettingEntry("light_sources.enchanted_light_source", DEFAULT_ENCHANTED_LIGHT_SOURCE, this.config,
+				Text.translatable("lambdynlights.tooltip.enchanted_light_source"));
+		this.dynamicEnchantedLighting = new BooleanSettingEntry("light_sources.dynamic_enchanted_light_amount", DEFAULT_DYNAMIC_ENCHANTED_LIGHT_AMOUNT, this.config,
+				Text.translatable("lambdynlights.tooltip.dynamic_enchanted_light_sources"));
+		this.fixedEnchantedLightAmount = new IntegerSettingEntry("light_sources.fixed_enchanted_light_amount", DEFAULT_FIXED_ENCHANTED_LIGHT_AMOUNT, this.config,
+				Text.translatable("lambdynlights.tooltip.fixed_enchanted_light_sources"));
+
 	}
 
 	/**
@@ -96,6 +110,9 @@ public class DynamicLightsConfig {
 		this.selfLightSource.load(this.config);
 		this.blockEntitiesLightSource.load(this.config);
 		this.waterSensitiveCheck.load(this.config);
+		this.enchantedLightSource.load(this.config);
+		this.dynamicEnchantedLighting.load(this.config);
+		this.fixedEnchantedLightAmount.load(this.config);
 		this.creeperLightingMode = ExplosiveLightingMode.byId(this.config.getOrElse("light_sources.creeper", DEFAULT_CREEPER_LIGHTING_MODE.getName()))
 				.orElse(DEFAULT_CREEPER_LIGHTING_MODE);
 		this.tntLightingMode = ExplosiveLightingMode.byId(this.config.getOrElse("light_sources.tnt", DEFAULT_TNT_LIGHTING_MODE.getName()))
@@ -129,6 +146,9 @@ public class DynamicLightsConfig {
 		this.getSelfLightSource().set(DEFAULT_SELF_LIGHT_SOURCE);
 		this.getBlockEntitiesLightSource().set(DEFAULT_BLOCK_ENTITIES_LIGHT_SOURCE);
 		this.getWaterSensitiveCheck().set(DEFAULT_WATER_SENSITIVE_CHECK);
+		this.getEnchantedLightSource().set(DEFAULT_ENCHANTED_LIGHT_SOURCE);
+		this.getDynamicEnchantmentLighting().set(DEFAULT_DYNAMIC_ENCHANTED_LIGHT_AMOUNT);
+		this.getFixedEnchantedLightAmount().set(DEFAULT_FIXED_ENCHANTED_LIGHT_AMOUNT);
 		this.setCreeperLightingMode(DEFAULT_CREEPER_LIGHTING_MODE);
 		this.setTntLightingMode(DEFAULT_TNT_LIGHTING_MODE);
 	}
@@ -182,6 +202,30 @@ public class DynamicLightsConfig {
 	 */
 	public BooleanSettingEntry getWaterSensitiveCheck() {
 		return this.waterSensitiveCheck;
+	}
+
+	/**
+	 * {@return the enchanted light source setting holder}
+	 */
+
+	public BooleanSettingEntry getEnchantedLightSource() {
+		return this.enchantedLightSource;
+	}
+
+	/**
+	 * {@return the dynamic enchanted lighting setting holder}
+	 */
+
+	public BooleanSettingEntry getDynamicEnchantmentLighting() {
+		return this.dynamicEnchantedLighting;
+	}
+
+	/**
+	 * {@return the fixed enchanted light amount setting holder}
+	 */
+
+	public IntegerSettingEntry getFixedEnchantedLightAmount() {
+		return this.fixedEnchantedLightAmount;
 	}
 
 	/**

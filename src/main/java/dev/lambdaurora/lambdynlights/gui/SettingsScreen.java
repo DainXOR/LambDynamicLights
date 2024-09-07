@@ -141,14 +141,6 @@ public class SettingsScreen extends SpruceScreen {
 				graphics.fillGradient(widget.getX(), innerWidget.getY() + innerWidget.getHeight(),
 						widget.getX() + widget.getWidth(), widget.getY() + widget.getHeight(),
 						0xc0101010, 0xd0101010);
-			} else {
-				var bg = (DirtTexturedBackground) DirtTexturedBackground.NORMAL;
-				RenderUtil.renderBackgroundTexture(widget.getX(), widget.getY(),
-						widget.getWidth(), innerWidget.getY() - widget.getY(),
-						vOffset / 32.f, bg.red(), bg.green(), bg.blue(), bg.alpha());
-				RenderUtil.renderBackgroundTexture(widget.getX(), innerWidget.getY() + innerWidget.getHeight(),
-						widget.getWidth(), widget.getHeight() - (innerWidget.getY() + innerWidget.getHeight()),
-						vOffset / 32.f, bg.red(), bg.green(), bg.blue(), bg.alpha());
 			}
 		});
 

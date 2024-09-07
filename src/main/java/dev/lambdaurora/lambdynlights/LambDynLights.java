@@ -458,12 +458,12 @@ public class LambDynLights implements ClientModInitializer {
 		boolean submergedInFluid = isEyeSubmergedInFluid(entity);
 		int luminance = 0;
 
-		for (var equipped : entity.getItemsEquipped()) {
+		for (var equipped : entity.getEquippedItems()) {
 			if (!equipped.isEmpty())
-				luminance = Math.max(luminance, LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid));
+				luminance += LambDynLights.getLuminanceFromItemStack(equipped, submergedInFluid);
 		}
 
-		return luminance;
+		return Math.min(luminance, 15);
 	}
 
 	/**
